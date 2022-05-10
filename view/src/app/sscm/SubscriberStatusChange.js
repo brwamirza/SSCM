@@ -12,9 +12,11 @@ export class SubscriberStatusChange extends Component {
   super();
 
   this.state = {
-    msisdn: []
+    msisdn: [],
+    statusTo: ""
   };
 
+  this.onChangeStatus = this.onChangeStatus.bind(this);
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
   this.OnStart = this.OnStart.bind(this);
 }
@@ -24,13 +26,19 @@ onChangeMsisdn(e) {
     msisdn: e.target.value.split('\n')
   });
     // console.log(e.target.value);
-    console.log(e.target.value.split('\n'));
+    // console.log(e.target.value.split('\n'));
+};
+
+onChangeStatus(e) {
+  this.setState({
+    statusTo: e.target.value
+  });
 };
 
 OnStart(e){
 e.preventDefault();
 this.state.msisdn.map(currentMsisdn => {
-  soapService.SubscriberStatusChange(currentMsisdn)
+  soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
       // .then(response => {
       //   console.log(currentMsisdn + " finished successfully");
       //   console.log(response);
@@ -55,10 +63,18 @@ this.state.msisdn.map(currentMsisdn => {
                     <div className="col-md-2">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">MSISDN</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea1" onChange={this.onChangeMsisdn} rows="30"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea1" onChange={this.onChangeMsisdn} rows="20"></textarea>
                     </Form.Group>
+                    <Form.Group>
+                  <label htmlFor="status">Status</label>
+                  <select className="form-control" onChange={this.onChangeStatus} id="status">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                </Form.Group>
                     <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
-                    <button className="btn btn-dark">Cancel</button>
+                    <button className="btn btn-dark" >Cancel</button>
                     </div>
 
                     <div className="col-md-9 offset-1">

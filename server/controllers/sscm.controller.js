@@ -40,7 +40,7 @@ exports.subscriberStatusChange = (req, res) => {
         '<soapenv:Body>'+
         '<ws:subscriberStatusChange>'+
         '<ws:msisdn>'+req.body.msisdn+'</ws:msisdn>'+
-        '<ws:newStatus>3</ws:newStatus>'+
+        '<ws:newStatus>'+req.body.statusTo+'</ws:newStatus>'+
         '<ws:transactionId>'+req.body.msisdn+'</ws:transactionId>'+
         '</ws:subscriberStatusChange>'+
         '</soapenv:Body>'+
@@ -62,6 +62,7 @@ exports.subscriberStatusChange = (req, res) => {
                     // console.log(JSON.name);
                     else{
                         console.log(JSON.stringify(result,null, 1));
+                        // console.log(result)
                         // console.log("response: ", JSON.parse(result) )
                     }
                 })
