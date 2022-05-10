@@ -26,7 +26,7 @@ onChangeMsisdn(e) {
     msisdn: e.target.value.split('\n')
   });
     // console.log(e.target.value);
-    // console.log(e.target.value.split('\n'));
+    console.log(e.target.value.split('\n'));
 };
 
 onChangeStatus(e) {

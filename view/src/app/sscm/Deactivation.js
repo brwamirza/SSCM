@@ -66,13 +66,24 @@ this.state.msisdn.map(currentMsisdn => {
                     <textarea className="form-control textarea-control" id="exampleTextarea1" onChange={this.onChangeMsisdn} rows="20"></textarea>
                     </Form.Group>
                     <Form.Group>
-                  <label htmlFor="status">Status</label>
-                  <select className="form-control" onChange={this.onChangeStatus} id="status">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </Form.Group>
+                    <label htmlFor="exampleTextarea1">Offer Id</label>
+                      <div>
+                      <Form.Control  type="text" />
+                      </div>
+                    </Form.Group>
+                    <Form.Group>
+                    <label htmlFor="exampleTextarea1">Campaign Id</label>
+                      <div>
+                      <Form.Control  type="text" />
+                      </div>
+                    </Form.Group>
+                    <Form.Group>
+                    <label htmlFor="status">Action Type</label>
+                    <select className="form-control" onChange={this.onChangeStatus} id="status">
+                      <option>Stop Renewal</option>
+                      <option>Terminate</option>
+                    </select>
+                   </Form.Group>
                     <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
                     <button className="btn btn-dark" >Cancel</button>
                     </div>
@@ -80,7 +91,7 @@ this.state.msisdn.map(currentMsisdn => {
                     <div className="col-md-9 offset-1">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="30"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="40"></textarea>
                     </Form.Group>
                     </div>
                     </div>
