@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.esdp.ericsson.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:subscriberStatusChange>
+         <ws:msisdn>9647519989013</ws:msisdn>
+         <ws:newStatus>3</ws:newStatus>
+         <ws:transactionId>9647519989013</ws:transactionId>
+      </ws:subscriberStatusChange>
+   </soapenv:Body>
+</soapenv:Envelope>
