@@ -26,6 +26,8 @@ const VerifyEmail = lazy(() => import('./registration/VerifyEmail'));
 
 // sscm components
 const SubscriberStatusChange = lazy(() => import('./sscm/SubscriberStatusChange'));
+const Deactivation = lazy(() => import('./sscm/Deactivation'));
+
 
 
 
@@ -59,6 +61,7 @@ class AppRoutes extends Component {
           <Route path="/verify/:token" component={ VerifyEmail } />
           <Route path="/verify/" component={ VerifyEmail } />
           <Route path="/SubscriberStatusChange/" component={ SubscriberStatusChange } />
+          <Route path="/Deactivation/" component={ Deactivation } />
           <Redirect to="/SubscriberStatusChange" />
         </Switch>
       </Suspense>

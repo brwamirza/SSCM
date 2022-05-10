@@ -23,12 +23,12 @@ class Navbar extends Component {
           <ul className="navbar-nav w-100">
             <li className="nav-item w-100">
               <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                <input type="text" className="form-control" placeholder="Search products" />
+                <input type="text" className="form-control" placeholder="Search MSISDN" />
               </form>
             </li>
           </ul>
           <ul className="navbar-nav navbar-nav-right">
-            <Dropdown alignRight as="li" className="nav-item d-none d-lg-block">
+            {/* <Dropdown alignRight as="li" className="nav-item d-none d-lg-block">
                 <Dropdown.Toggle className="nav-link btn btn-success create-new-button no-caret">
                 + <Trans>Create New Project</Trans>
                 </Dropdown.Toggle>
@@ -71,7 +71,7 @@ class Navbar extends Component {
                   <Dropdown.Divider />
                   <p className="p-3 mb-0 text-center"><Trans>See all projects</Trans></p>
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
             <li className="nav-item d-none d-lg-block">
               <a className="nav-link" href="!#" onClick={event => event.preventDefault()}>
                 <i className="mdi mdi-view-grid"></i>

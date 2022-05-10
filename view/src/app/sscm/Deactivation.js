@@ -7,7 +7,7 @@ import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import soapService from "../../services/soapRequest.service"
 
-export class SubscriberStatusChange extends Component {
+export class Deactivation extends Component {
   constructor() {
   super();
 
@@ -38,7 +38,7 @@ onChangeStatus(e) {
 OnStart(e){
 e.preventDefault();
 this.state.msisdn.map(currentMsisdn => {
-  soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
+  // soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
       // .then(response => {
       //   console.log(currentMsisdn + " finished successfully");
       //   console.log(response);
@@ -57,7 +57,7 @@ this.state.msisdn.map(currentMsisdn => {
         <div className="col-12 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">SSCM Subscriber status change - Production</h4>
+                <h4 className="card-title">SSCM Stop renewal - Production</h4>
                 <form className="form-sample">
                   <div className="row mt-5">
                     <div className="col-md-2">
@@ -94,4 +94,4 @@ this.state.msisdn.map(currentMsisdn => {
   }
 }
 
-export default SubscriberStatusChange;
+export default Deactivation;

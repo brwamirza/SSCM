@@ -59,7 +59,7 @@ class Sidebar extends Component {
           <a className="sidebar-brand brand-logo-mini" href="index.html"><img src={require('../../assets/images/logo-mini.svg').default} alt="logo" /></a> */}
         </div>
         <ul className="nav">
-          <li className="nav-item profile">
+          {/* <li className="nav-item profile">
             <div className="profile-desc">
               <div className="profile-pic">
                 <div className="count-indicator">
@@ -67,7 +67,7 @@ class Sidebar extends Component {
                   <span className="count bg-success"></span>
                 </div>
                 <div className="profile-name">
-                  <h5 className="mb-0 font-weight-normal"><Trans>Henry Klein</Trans></h5>
+                  <h5 className="mb-0 font-weight-normal"><Trans>APP SUPPORT</Trans></h5>
                   <span><Trans>Gold Member</Trans></span>
                 </div>
               </div>
@@ -111,9 +111,9 @@ class Sidebar extends Component {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-          </li>
+          </li> */}
           <li className="nav-item nav-category">
-            <span className="nav-link"><Trans>Navigation</Trans></span>
+            <span className="nav-link"><Trans>Actions</Trans></span>
           </li>
           <li className={ this.isPathActive('/dashboard') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
             <Link className="nav-link" to="/dashboard">
@@ -125,6 +125,12 @@ class Sidebar extends Component {
             <Link className="nav-link" to="/SubscriberStatusChange">
               <span className="menu-icon"><i className="mdi mdi-speedometer"></i></span>
               <span className="menu-title"><Trans>Status Change</Trans></span>
+            </Link>
+          </li>
+          <li className={ this.isPathActive('/Deactivation') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <Link className="nav-link" to="/Deactivation">
+              <span className="menu-icon"><i className="mdi mdi-speedometer"></i></span>
+              <span className="menu-title"><Trans>Deactivation</Trans></span>
             </Link>
           </li>
           <li className={ this.isPathActive('/basic-ui') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
