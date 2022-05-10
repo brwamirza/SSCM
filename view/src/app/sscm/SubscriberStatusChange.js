@@ -30,9 +30,21 @@ onChangeMsisdn(e) {
 };
 
 onChangeStatus(e) {
-  this.setState({
-    statusTo: e.target.value
-  });
+  if( e.target.value === "Active"){
+    this.setState({
+      statusTo: "1"
+    });
+  }
+  if( e.target.value === "Suspend"){
+    this.setState({
+      statusTo: "2"
+    });
+  }
+  if( e.target.value === "Terminate"){
+    this.setState({
+      statusTo: "3"
+    });
+  }
 };
 
 OnStart(e){
@@ -68,9 +80,9 @@ this.state.msisdn.map(currentMsisdn => {
                     <Form.Group>
                   <label htmlFor="status">Status</label>
                   <select className="form-control" onChange={this.onChangeStatus} id="status">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    <option>Active</option>
+                    <option>Suspend</option>
+                    <option>Terminate</option>
                   </select>
                 </Form.Group>
                     <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
