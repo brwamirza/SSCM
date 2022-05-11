@@ -13,11 +13,15 @@ export class Deactivation extends Component {
 
   this.state = {
     msisdn: [],
-    statusTo: ""
+    offerId: "",
+    campaignId:"",
+    actionType:""
   };
 
-  this.onChangeStatus = this.onChangeStatus.bind(this);
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
+  this.onChangeOfferId = this.onChangeOfferId.bind(this);
+  this.onChangeCampaignId = this.onChangeCampaignId.bind(this);
+  this.onChangeActionType = this.onChangeActionType.bind(this);
   this.OnStart = this.OnStart.bind(this);
 }
 
@@ -25,29 +29,38 @@ onChangeMsisdn(e) {
   this.setState({
     msisdn: e.target.value.split('\n')
   });
-    // console.log(e.target.value);
-    // console.log(e.target.value.split('\n'));
 };
 
-onChangeStatus(e) {
+onChangeOfferId(e) {
   this.setState({
-    statusTo: e.target.value
+    offerId: e.target.value
+  });
+};
+
+onChangeCampaignId(e) {
+  this.setState({
+    campaignId: e.target.value
+  });
+};
+
+onChangeActionType(e) {
+  this.setState({
+    actionType: e.target.value
   });
 };
 
 OnStart(e){
 e.preventDefault();
+if (this.state.actionType = "Stop Renewal"){
 this.state.msisdn.map(currentMsisdn => {
-  // soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
-      // .then(response => {
-      //   console.log(currentMsisdn + " finished successfully");
-      //   console.log(response);
-      // })
-      // .catch(e => {
-      //   console.log(e)
-      //   console.log(currentMsisdn + " failed to change status");
-      // });
+  soapService.SubscriberStatusChange(currentMsisdn,this.state.offerId,this.state.campaignId)
 });
+};
+if (this.state.actionType = "Terminate"){
+  this.state.msisdn.map(currentMsisdn => {
+    soapService.SubscriberStatusChange(currentMsisdn,this.state.offerId,this.state.campaignId)
+  });
+};
 };
 
   render () {
@@ -57,7 +70,7 @@ this.state.msisdn.map(currentMsisdn => {
         <div className="col-12 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">SSCM Stop renewal - Production</h4>
+                <h4 className="card-title">SSCM Deactivation - Production</h4>
                 <form className="form-sample">
                   <div className="row mt-5">
                     <div className="col-md-2">
@@ -68,18 +81,18 @@ this.state.msisdn.map(currentMsisdn => {
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Offer Id</label>
                       <div>
-                      <Form.Control  type="text" />
+                      <Form.Control  type="text" onChange={this.onChangeOfferId} />
                       </div>
                     </Form.Group>
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Campaign Id</label>
                       <div>
-                      <Form.Control  type="text" />
+                      <Form.Control  type="text" onChange={this.onChangeCampaignId}/>
                       </div>
                     </Form.Group>
                     <Form.Group>
                     <label htmlFor="status">Action Type</label>
-                    <select className="form-control" onChange={this.onChangeStatus} id="status">
+                    <select className="form-control" onChange={this.onChangeActionType} id="status">
                       <option>Stop Renewal</option>
                       <option>Terminate</option>
                     </select>
