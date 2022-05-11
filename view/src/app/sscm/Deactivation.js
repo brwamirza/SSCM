@@ -15,13 +15,18 @@ export class Deactivation extends Component {
     msisdn: [],
     offerId: "",
     campaignId:"",
-    actionType:""
+    actionType:"",
+    channel:"",
+    currentDate:"",
+    transactionId:""
   };
 
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
   this.onChangeOfferId = this.onChangeOfferId.bind(this);
   this.onChangeCampaignId = this.onChangeCampaignId.bind(this);
   this.onChangeActionType = this.onChangeActionType.bind(this);
+  this.onChangeChannel = this.onChangeChannel.bind(this);
+  this.onChangeTransactionId = this.onChangeTransactionId.bind(this);
   this.OnStart = this.OnStart.bind(this);
 }
 
@@ -49,16 +54,29 @@ onChangeActionType(e) {
   });
 };
 
+onChangeChannel(e) {
+  this.setState({
+    channel: e.target.value
+  });
+};
+
+onChangeTransactionId(e) {
+  this.setState({
+    transactionId: e.target.value
+  });
+};
+
 OnStart(e){
 e.preventDefault();
 if (this.state.actionType = "Stop Renewal"){
 this.state.msisdn.map(currentMsisdn => {
-  soapService.SubscriberStatusChange(currentMsisdn,this.state.offerId,this.state.campaignId)
+  soapService.StopRenewal(currentMsisdn,this.state.offerId,this.state.campaignId,this.state.channel.this.state.currentDate,this.state.transactionId)
 });
 };
+
 if (this.state.actionType = "Terminate"){
   this.state.msisdn.map(currentMsisdn => {
-    soapService.SubscriberStatusChange(currentMsisdn,this.state.offerId,this.state.campaignId)
+    soapService.TerminateOffer(currentMsisdn,this.state.offerId,this.state.channel)
   });
 };
 };
@@ -73,23 +91,38 @@ if (this.state.actionType = "Terminate"){
                 <h4 className="card-title">SSCM Deactivation - Production</h4>
                 <form className="form-sample">
                   <div className="row mt-5">
-                    <div className="col-md-2">
+                    <div className="col-md-3">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">MSISDN</label>
                     <textarea className="form-control textarea-control" id="exampleTextarea1" onChange={this.onChangeMsisdn} rows="20"></textarea>
                     </Form.Group>
-                    <Form.Group>
-                    <label htmlFor="exampleTextarea1">Offer Id</label>
-                      <div>
-                      <Form.Control  type="text" onChange={this.onChangeOfferId} />
+                    <div className='row'>
+                      <div className='col col-md-6'>
+                        <Form.Group>
+                        <label htmlFor="exampleTextarea1">Offer Id</label>
+                        <div>
+                        <Form.Control  type="text" onChange={this.onChangeOfferId} />
                       </div>
                     </Form.Group>
-                    <Form.Group>
-                    <label htmlFor="exampleTextarea1">Campaign Id</label>
-                      <div>
-                      <Form.Control  type="text" onChange={this.onChangeCampaignId}/>
+                      </div>
+
+                      <div className='col col-md-6'>
+                        <Form.Group>
+                        <label htmlFor="exampleTextarea1">Campaign Id</label>
+                        <div>
+                        <Form.Control  type="text" onChange={this.onChangeCampaignId}/>
                       </div>
                     </Form.Group>
+                      </div>
+                    </div>
+                    <Form.Group>
+                    <label htmlFor="status">Channel</label>
+                    <select className="form-control" onChange={this.onChangeChannel} id="status">
+                      <option>APPSUPPORT</option>
+                      <option>CRM</option>
+                      <option>CORPORATE</option>
+                    </select>
+                   </Form.Group>
                     <Form.Group>
                     <label htmlFor="status">Action Type</label>
                     <select className="form-control" onChange={this.onChangeActionType} id="status">
@@ -97,11 +130,17 @@ if (this.state.actionType = "Terminate"){
                       <option>Terminate</option>
                     </select>
                    </Form.Group>
+                   <Form.Group>
+                    <label htmlFor="exampleTextarea1">Transaction Id</label>
+                      <div>
+                      <Form.Control  type="text" onChange={this.onChangeTransactionId}/>
+                      </div>
+                    </Form.Group>
                     <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
                     <button className="btn btn-dark" >Cancel</button>
                     </div>
 
-                    <div className="col-md-9 offset-1">
+                    <div className="col-md-9 ">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
                     <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="40"></textarea>
