@@ -1,14 +1,7 @@
 const db = require("../models");
-const config = require("../config/auth.config");
-const User = db.users;
-const Token = db.tokens;
-var nodemailer = require('nodemailer');
 const Op = db.Sequelize.Op;
-var bcrypt = require("bcryptjs");
-var jwt = require("jsonwebtoken");
 var XMLHttpRequest = require('xhr2');
 var xmlhttp = new XMLHttpRequest();
-const soapRequest = require('easy-soap-request');
 const fs = require('fs')
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false});
@@ -35,8 +28,10 @@ exports.subscriberStatusChange = (req, res) => {
                     if(err){
                         throw err;
                     }
+                    // success response to front end
                     else{
                         console.log(JSON.stringify(result,null, 1));
+                        
                     }
                 })
                 // alert('done. use firebug/console to see network response');

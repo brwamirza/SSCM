@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import { Line,Doughnut } from 'react-chartjs-2';
-import Slider from "react-slick";
-import { TodoListComponent } from '../apps/TodoList'
-import { VectorMap } from "react-jvectormap"
 import { Form } from 'react-bootstrap';
-import DatePicker from "react-datepicker";
 import soapService from "../../services/soapRequest.service"
 
 export class SubscriberStatusChange extends Component {
@@ -46,6 +41,7 @@ onChangeStatus(e) {
     });
   }
 };
+
 
 OnStart(e){
 e.preventDefault();

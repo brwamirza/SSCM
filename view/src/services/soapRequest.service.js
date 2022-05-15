@@ -1,5 +1,4 @@
 import http from "../http-common";
-var xmlhttp = new XMLHttpRequest();
 
 class soapService {
 // SSCM Subscriber status change soap request
@@ -8,7 +7,8 @@ SubscriberStatusChange(msisdn,statusTo){
             msisdn,
             statusTo
         });
-    }   
+    } 
+
 // SSCM Stop Renewal soap request
 StopRenewal(msisdn,offerId,campaignId,channel,currentDate,transactionId){
     return http.post("/sscm/stopRenewal",{
@@ -20,6 +20,7 @@ StopRenewal(msisdn,offerId,campaignId,channel,currentDate,transactionId){
         transactionId
     });
 }
+
 // SSCM Termination soap request
 TerminateOffer(msisdn,offerId,channel){
     return http.post("/sscm/terminateOffer",{
@@ -27,6 +28,7 @@ TerminateOffer(msisdn,offerId,channel){
         offerId,
         channel
     });
-}   
+} 
+
 }
 export default new soapService();

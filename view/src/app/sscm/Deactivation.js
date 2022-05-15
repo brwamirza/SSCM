@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Line,Doughnut } from 'react-chartjs-2';
 import Slider from "react-slick";
-import { TodoListComponent } from '../apps/TodoList'
-import { VectorMap } from "react-jvectormap"
+import { TodoListComponent } from '../apps/TodoList';
+import { VectorMap } from "react-jvectormap";
 import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
-import soapService from "../../services/soapRequest.service"
-
+import soapService from "../../services/soapRequest.service";
+const separator='';
+const current = new Date();
+const date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
+const date2 = `${current.getFullYear()}${separator}${current.getMonth()+1<10?`0${current.getMonth()+1}`:`${current.getMonth()+1}`}${separator}${current.getDate()}`
 export class Deactivation extends Component {
   constructor() {
   super();
@@ -99,7 +102,7 @@ if (this.state.actionType = "Terminate"){
                     <div className='row'>
                       <div className='col col-md-6'>
                         <Form.Group>
-                        <label htmlFor="exampleTextarea1">Offer Id</label>
+                        <label htmlFor="exampleTextarea1">Offer Id {date}</label>
                         <div>
                         <Form.Control  type="text" onChange={this.onChangeOfferId} />
                       </div>
@@ -107,12 +110,12 @@ if (this.state.actionType = "Terminate"){
                       </div>
 
                       <div className='col col-md-6'>
-                        <Form.Group>
+                       <Form.Group>
                         <label htmlFor="exampleTextarea1">Campaign Id</label>
                         <div>
                         <Form.Control  type="text" onChange={this.onChangeCampaignId}/>
-                      </div>
-                    </Form.Group>
+                        </div>
+                       </Form.Group>
                       </div>
                     </div>
                     <Form.Group>
@@ -122,7 +125,7 @@ if (this.state.actionType = "Terminate"){
                       <option>CRM</option>
                       <option>CORPORATE</option>
                     </select>
-                   </Form.Group>
+                    </Form.Group>
                     <Form.Group>
                     <label htmlFor="status">Action Type</label>
                     <select className="form-control" onChange={this.onChangeActionType} id="status">
@@ -131,7 +134,8 @@ if (this.state.actionType = "Terminate"){
                     </select>
                    </Form.Group>
                    <Form.Group>
-                    <label htmlFor="exampleTextarea1">Transaction Id</label>
+                    <label htmlFor="exampleTextarea1">Transaction Id (Reason)</label>
+                    <p>{date2}</p>
                       <div>
                       <Form.Control  type="text" onChange={this.onChangeTransactionId}/>
                       </div>
@@ -143,7 +147,7 @@ if (this.state.actionType = "Terminate"){
                     <div className="col-md-9 ">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="40"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="42"></textarea>
                     </Form.Group>
                     </div>
                     </div>
