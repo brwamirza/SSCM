@@ -8,8 +8,8 @@ import DatePicker from "react-datepicker";
 import soapService from "../../services/soapRequest.service";
 const separator='';
 const current = new Date();
-const date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
-const date2 = `${current.getFullYear()}${separator}${current.getMonth()+1<10?`0${current.getMonth()+1}`:`${current.getMonth()+1}`}${separator}${current.getDate()}`
+const date = `${current.getFullYear()}${separator}${current.getMonth()+1<10?`0${current.getMonth()+1}`:`${current.getMonth()+1}`}${separator}${current.getDate()}`
+
 export class Deactivation extends Component {
   constructor() {
   super();
@@ -21,7 +21,8 @@ export class Deactivation extends Component {
     actionType:"",
     channel:"",
     currentDate:"",
-    transactionId:""
+    transactionId:"",
+    currentDate: date
   };
 
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
@@ -102,7 +103,7 @@ if (this.state.actionType = "Terminate"){
                     <div className='row'>
                       <div className='col col-md-6'>
                         <Form.Group>
-                        <label htmlFor="exampleTextarea1">Offer Id {date}</label>
+                        <label htmlFor="exampleTextarea1">Offer Id</label>
                         <div>
                         <Form.Control  type="text" onChange={this.onChangeOfferId} />
                       </div>
@@ -135,7 +136,6 @@ if (this.state.actionType = "Terminate"){
                    </Form.Group>
                    <Form.Group>
                     <label htmlFor="exampleTextarea1">Transaction Id (Reason)</label>
-                    <p>{date2}</p>
                       <div>
                       <Form.Control  type="text" onChange={this.onChangeTransactionId}/>
                       </div>

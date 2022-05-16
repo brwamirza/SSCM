@@ -31,7 +31,7 @@ exports.subscriberStatusChange = (req, res) => {
                     // success response to front end
                     else{
                         console.log(JSON.stringify(result,null, 1));
-                        
+
                     }
                 })
                 // alert('done. use firebug/console to see network response');
