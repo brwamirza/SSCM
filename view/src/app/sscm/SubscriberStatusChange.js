@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form } from 'react-bootstrap';
 import soapService from "../../services/soapRequest.service"
+var XMLParser = require('react-xml-parser');
 
 export class SubscriberStatusChange extends Component {
   constructor() {
@@ -8,13 +9,15 @@ export class SubscriberStatusChange extends Component {
 
   this.state = {
     msisdn: [],
-    statusTo: ""
+    statusTo: "",
+    result:[]
   };
 
   this.onChangeStatus = this.onChangeStatus.bind(this);
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
   this.OnStart = this.OnStart.bind(this);
 }
+
 
 onChangeMsisdn(e) {
   this.setState({
@@ -47,14 +50,19 @@ OnStart(e){
 e.preventDefault();
 this.state.msisdn.map(currentMsisdn => {
   soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
-      // .then(response => {
-      //   console.log(currentMsisdn + " finished successfully");
-      //   console.log(response);
-      // })
-      // .catch(e => {
-      //   console.log(e)
-      //   console.log(currentMsisdn + " failed to change status");
-      // });
+      .then(response => {
+        console.log(currentMsisdn + " finished successfully");
+        var xml = new XMLParser().parseFromString(response.data);
+        var responseValue = xml.getElementsByTagName("description")[0].value
+        this.setState({
+          result: [...this.state.result,responseValue]
+        })
+        console.log(this.state.result);
+      })
+      .catch(e => {
+        console.log(e)
+        console.log(currentMsisdn + " failed to change status");
+      });
 });
 };
 
@@ -88,7 +96,8 @@ this.state.msisdn.map(currentMsisdn => {
                     <div className="col-md-9 offset-1">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="30"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12" rows="30">
+                    </textarea>
                     </Form.Group>
                     </div>
                     </div>

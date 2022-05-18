@@ -4,7 +4,7 @@ var XMLHttpRequest = require('xhr2');
 var xmlhttp = new XMLHttpRequest();
 const fs = require('fs')
 const xml2js = require('xml2js');
-const parser = new xml2js.Parser({ explicitArray: false});
+const parser = new xml2js.Parser({mergeAttrs:true});
 
 // Find all published Users
 exports.subscriberStatusChange = (req, res) => {
@@ -24,16 +24,20 @@ exports.subscriberStatusChange = (req, res) => {
         xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200) {
-                parser.parseString(xmlhttp.response, (err, result) => {
-                    if(err){
-                        throw err;
-                    }
+                var xmlResponse =xmlhttp.response;
+                
+                res.send(xmlResponse);
+                // parser.parseString(xmlResponse, { mergeAttrs: true }, (err, result) => {
+                //     if(err){
+                //         throw err;
+                //     }
                     // success response to front end
-                    else{
-                        console.log(JSON.stringify(result,null, 1));
-
-                    }
-                })
+                    // else{
+                        // let data = JSON.stringify(result)
+                        
+                //         console.log(result)
+                //     }
+                // })
                 // alert('done. use firebug/console to see network response');
             }
         }

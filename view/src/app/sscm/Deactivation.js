@@ -19,9 +19,9 @@ export class Deactivation extends Component {
     offerId: "",
     campaignId:"",
     actionType:"",
-    channel:"",
+    channel:"APPSUPPORT",
     currentDate:"",
-    transactionId:"",
+    transactionId:"APPSUPPORT",
     currentDate: date
   };
 
@@ -72,13 +72,15 @@ onChangeTransactionId(e) {
 
 OnStart(e){
 e.preventDefault();
-if (this.state.actionType = "Stop Renewal"){
+if (this.state.actionType == "Stop Renewal"){
+console.log("stop renewal started");
 this.state.msisdn.map(currentMsisdn => {
-  soapService.StopRenewal(currentMsisdn,this.state.offerId,this.state.campaignId,this.state.channel.this.state.currentDate,this.state.transactionId)
+  soapService.StopRenewal(currentMsisdn,this.state.offerId,this.state.campaignId,this.state.channel,this.state.currentDate,this.state.transactionId)
 });
 };
 
-if (this.state.actionType = "Terminate"){
+if (this.state.actionType == "Terminate"){
+  console.log("termination started");
   this.state.msisdn.map(currentMsisdn => {
     soapService.TerminateOffer(currentMsisdn,this.state.offerId,this.state.channel)
   });
