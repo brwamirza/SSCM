@@ -2,7 +2,7 @@ import React, { Component,Suspense, lazy } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../app/shared/Spinner';
 
-const Dashboard = lazy(() => import('./dashboard/Dashboard'));
+const Dashboard = lazy(() => import('./sscm/Dashboard'));
 const MyDashboard = lazy(() => import('./dashboard/MyDashboard'));
 const Buttons = lazy(() => import('./basic-ui/Buttons'));
 const Dropdowns = lazy(() => import('./basic-ui/Dropdowns'));
@@ -62,7 +62,7 @@ class AppRoutes extends Component {
           <Route path="/verify/" component={ VerifyEmail } />
           <Route path="/SubscriberStatusChange/" component={ SubscriberStatusChange } />
           <Route path="/Deactivation/" component={ Deactivation } />
-          <Redirect to="/SubscriberStatusChange" />
+          <Redirect to="/dashboard" />
         </Switch>
       </Suspense>
     );

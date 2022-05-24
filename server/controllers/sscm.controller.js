@@ -25,20 +25,7 @@ exports.subscriberStatusChange = (req, res) => {
         if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200) {
                 var xmlResponse =xmlhttp.response;
-                
                 res.send(xmlResponse);
-                // parser.parseString(xmlResponse, { mergeAttrs: true }, (err, result) => {
-                //     if(err){
-                //         throw err;
-                //     }
-                    // success response to front end
-                    // else{
-                        // let data = JSON.stringify(result)
-                        
-                //         console.log(result)
-                //     }
-                // })
-                // alert('done. use firebug/console to see network response');
             }
         }
     }
@@ -80,15 +67,8 @@ exports.terminateOffer = (req, res) => {
         xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200) {
-                parser.parseString(xmlhttp.response, (err, result) => {
-                    if(err){
-                        throw err;
-                    }
-                    else{
-                        console.log(JSON.stringify(result,null, 1));
-                    }
-                })
-                // alert('done. use firebug/console to see network response');
+                var xmlResponse =xmlhttp.response;
+                res.send(xmlResponse);
             }
         }
     }
@@ -143,15 +123,8 @@ exports.stopRenewal = (req, res) => {
         xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             if (xmlhttp.status == 200) {
-                parser.parseString(xmlhttp.response, (err, result) => {
-                    if(err){
-                        throw err;
-                    }
-                    else{
-                        console.log(JSON.stringify(result,null, 1));
-                    }
-                })
-                // alert('done. use firebug/console to see network response');
+                var xmlResponse =xmlhttp.response;
+                res.send(xmlResponse);
             }
         }
     }

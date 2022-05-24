@@ -55,8 +55,8 @@ class Sidebar extends Component {
     return (
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
         <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          {/* <a className="sidebar-brand brand-logo" href="index.html"><img src={require('../../assets/images/logo.svg').default} alt="logo" /></a>
-          <a className="sidebar-brand brand-logo-mini" href="index.html"><img src={require('../../assets/images/logo-mini.svg').default} alt="logo" /></a> */}
+          <a className="sidebar-brand brand-logo" href="index.html"><img src="https://cmscc.korektel.com/img/cycle_korek_logo.svg" alt="logo" /></a>
+          <a className="sidebar-brand brand-logo-mini" href="index.html"><img src="https://cmscc.korektel.com/img/cycle_korek_logo.svg" alt="logo" /></a>
         </div>
         <ul className="nav">
           {/* <li className="nav-item profile">

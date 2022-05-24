@@ -9,6 +9,7 @@ import soapService from "../../services/soapRequest.service";
 const separator='';
 const current = new Date();
 const date = `${current.getFullYear()}${separator}${current.getMonth()+1<10?`0${current.getMonth()+1}`:`${current.getMonth()+1}`}${separator}${current.getDate()}`
+var XMLParser = require('react-xml-parser');
 
 export class Deactivation extends Component {
   constructor() {
@@ -18,11 +19,12 @@ export class Deactivation extends Component {
     msisdn: [],
     offerId: "",
     campaignId:"",
-    actionType:"",
+    actionType:"Stop Renewal",
     channel:"APPSUPPORT",
     currentDate:"",
     transactionId:"APPSUPPORT",
-    currentDate: date
+    currentDate: date,
+    result:[]
   };
 
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
@@ -76,6 +78,22 @@ if (this.state.actionType == "Stop Renewal"){
 console.log("stop renewal started");
 this.state.msisdn.map(currentMsisdn => {
   soapService.StopRenewal(currentMsisdn,this.state.offerId,this.state.campaignId,this.state.channel,this.state.currentDate,this.state.transactionId)
+  .then(response => {
+    var xml = new XMLParser().parseFromString(response.data);
+    var responseValue = xml.getElementsByTagName("description")[0].value
+    var responseWithMsisdn = `${currentMsisdn} : StopRenewal : ${responseValue}`
+    this.setState({
+      result: [...this.state.result,responseWithMsisdn]
+    })
+    console.log(this.state.result);
+  })
+  .catch(e => {
+    console.log(e)
+    var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+    this.setState({
+      result: [...this.state.result,responseWithMsisdn]
+    })
+  });
 });
 };
 
@@ -83,6 +101,22 @@ if (this.state.actionType == "Terminate"){
   console.log("termination started");
   this.state.msisdn.map(currentMsisdn => {
     soapService.TerminateOffer(currentMsisdn,this.state.offerId,this.state.channel)
+    .then(response => {
+      var xml = new XMLParser().parseFromString(response.data);
+      var responseValue = xml.getElementsByTagName("description")[0].value
+      var responseWithMsisdn = `${currentMsisdn} : TerminateOffer : ${responseValue}`
+      this.setState({
+        result: [...this.state.result,responseWithMsisdn]
+      })
+      console.log(this.state.result);
+    })
+    .catch(e => {
+      console.log(e)
+      var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+      this.setState({
+        result: [...this.state.result,responseWithMsisdn]
+      })
+    });
   });
 };
 };
@@ -149,7 +183,7 @@ if (this.state.actionType == "Terminate"){
                     <div className="col-md-9 ">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="42"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="42" defaultValue={this.state.result.join('\n')} spellCheck="false"></textarea>
                     </Form.Group>
                     </div>
                     </div>

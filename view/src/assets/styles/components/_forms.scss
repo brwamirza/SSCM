@@ -25,11 +25,13 @@
   background-color: $input-bg;
   border-radius: 2px;
   color: #ffffff;
+  // border: 1px solid #90000404!important;
   &:focus {
     border: 1px solid rgba(71, 164, 71, 0.5);
     background-color: $input-bg;
   }
   &.form-control-lg {
+    color: #322f2f;
     padding: 0.94rem .75rem;
     height: calc(2.875rem + 2px);
   }
@@ -57,7 +59,7 @@ select {
   &.form-control {
     padding: .4375rem .75rem;
     border: 0;
-    outline: 1px solid #322f2f;
+    outline: 1px solid $border-color;
     color: $input-placeholder-color;
     &:focus {
       outline: 1px solid $border-color;

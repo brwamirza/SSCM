@@ -9,7 +9,7 @@ export class SubscriberStatusChange extends Component {
 
   this.state = {
     msisdn: [],
-    statusTo: "",
+    statusTo: "1",
     result:[]
   };
 
@@ -51,17 +51,19 @@ e.preventDefault();
 this.state.msisdn.map(currentMsisdn => {
   soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
       .then(response => {
-        console.log(currentMsisdn + " finished successfully");
         var xml = new XMLParser().parseFromString(response.data);
         var responseValue = xml.getElementsByTagName("description")[0].value
+        var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : ${responseValue}`
         this.setState({
-          result: [...this.state.result,responseValue]
+          result: [...this.state.result,responseWithMsisdn]
         })
-        console.log(this.state.result);
       })
       .catch(e => {
         console.log(e)
-        console.log(currentMsisdn + " failed to change status");
+        var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+        this.setState({
+          result: [...this.state.result,responseWithMsisdn]
+        })
       });
 });
 };
@@ -96,7 +98,7 @@ this.state.msisdn.map(currentMsisdn => {
                     <div className="col-md-9 offset-1">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12" rows="30">
+                    <textarea className="form-control textarea-control" id="exampleTextarea12" rows="30" defaultValue={this.state.result.join('\n')} spellCheck="false">
                     </textarea>
                     </Form.Group>
                     </div>
