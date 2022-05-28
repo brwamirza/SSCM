@@ -9,6 +9,7 @@
     "@tinymce/tinymce-react": "^3.3.2",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "bootstrap": "^4.3.1",
     "bosket": "^0.2.3",
     "brace": "^0.11.1",
@@ -68,6 +69,8 @@
     "sweetalert2-react": "^0.8.3",
     "ti-icons": "^0.1.2",
     "typicons.font": "^2.0.9",
+    "util": "^0.12.4",
+    "util-promisify": "^3.0.0",
     "xml2js": "^0.4.23"
   },
   "scripts": {
