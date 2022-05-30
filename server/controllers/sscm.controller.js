@@ -156,17 +156,54 @@ exports.stopRenewal = (req, res) => {
    '</soapenv:Body>'+
 '</soapenv:Envelope>';
 
-        xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4) {
-            if (xmlhttp.status == 200) {
-                var xmlResponse =xmlhttp.response;
-                res.send(xmlResponse);
-            }
-        }
-    }
     // Send the POST request
     // xmlhttp.setRequestHeader('PublicKeyToken','b77a5c561934e089');
     xmlhttp.setRequestHeader('soapAction','com.ericsson.esdp.flowmanager/subscriptionCreate');
     xmlhttp.setRequestHeader('Content-Type','application/xml'); 
     response = xmlhttp.send(sr);
+};
+
+
+// Find all published Users
+exports.retrieveSubscriptions = (req, res) => {
+    const XMLHttpRequest = require('xhr2');
+    const xmlhttp = new XMLHttpRequest();
+    let xmlResponse = "";
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    xmlResponse = xmlhttp.response
+                    result = xmlResponse
+                    console.log(result)
+                    res.send(result);
+                    result = [];
+                }
+            }
+        }
+    xmlhttp.open('POST', 'http://10.26.57.7:9080/esdp-wsPort', true);
+       var sr=
+       '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.esdp.ericsson.com">'+
+       '<soapenv:Header/>'+
+       '<soapenv:Body>'+
+          '<ws:retrieveSubscriptions>'+
+             '<ws:msisdn>'+req.body.msisdn+'</ws:msisdn>'+
+             '<ws:externalOfferId/>'+
+             '<ws:esdpOfferId xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>'+
+             '<ws:transactionId>appsupport</ws:transactionId>'+
+             '<ws:externalSubscriptionId xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>'+
+             '<ws:retrieveOption>3</ws:retrieveOption>'+
+             '<ws:enhancedRetrieveOption>'+
+                 '<ws:balance>1</ws:balance>'+
+                 '<ws:quota>1</ws:quota>'+
+                 '<ws:query>1</ws:query>'+
+             '</ws:enhancedRetrieveOption>'+
+          '</ws:retrieveSubscriptions>'+
+       '</soapenv:Body>'+
+    '</soapenv:Envelope>';
+
+    // Send the POST request
+    xmlhttp.setRequestHeader('soapAction','com.ericsson.esdp.flowmanager/subscriberStatusChange');
+    xmlhttp.setRequestHeader('Content-Type','application/xml'); 
+    let response = xmlhttp.send(sr)
 };

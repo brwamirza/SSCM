@@ -30,5 +30,14 @@ TerminateOffer(msisdn,offerId,channel){
     });
 } 
 
+// SSCM Termination soap request
+RetrieveSubscriptions(msisdn,offerId,channel){
+    return http.get("/sscm/retrieveSubscriptions",{
+        msisdn,
+        offerId,
+        channel
+    });
+} 
+
 }
 export default new soapService();

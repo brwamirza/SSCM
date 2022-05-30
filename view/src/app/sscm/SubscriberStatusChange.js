@@ -61,49 +61,42 @@ onChangeStatus(e) {
 OnStart(e){
 e.preventDefault();
 
-this.state.msisdn.map( async currentMsisdn => {
+this.state.msisdn.map( currentMsisdn => {
   // await wait(3*1000).then(async() => {
     // console.log("res")
 
-    let response = await soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
-    // if(response){
-          let currentResponse = response.data
-          console.log(response);
-          let xml = new XMLParser().parseFromString(currentResponse);
-          let responseValue = xml.getElementsByTagName("description")[0].value
-          console.log(responseValue)
-          let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
-          console.log(cMsisdn)
-          let responseWithMsisdn = `${cMsisdn} : SubscriberStatusChange : ${responseValue}`
-          this.setState({
-            result: [...this.state.result,responseWithMsisdn]
-          })
+    // let response = await soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
+    // // if(response){
+    //       let currentResponse = response.data
+    //       let xml = new XMLParser().parseFromString(currentResponse);
+    //       let responseValue = xml.getElementsByTagName("description")[0].value
+    //       let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
+    //       let responseWithMsisdn = `${cMsisdn} : SubscriberStatusChange : ${responseValue}`
+    //       this.setState({
+    //         result: [...this.state.result,responseWithMsisdn]
+    //       })
         // })
     // }
 
-  // soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
-  //     .then(response => {
-  //         response.data.map( currentResponse => {
-  //         console.log(currentResponse)
-  //         let xml = new XMLParser().parseFromString(currentResponse);
-  //         let responseValue = xml.getElementsByTagName("description")[0].value
-  //         let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
-  //         console.log(cMsisdn)
-  //         let responseWithMsisdn = `${cMsisdn} : SubscriberStatusChange : ${responseValue}`
-  //         this.setState({
-  //           result: [...this.state.result,responseWithMsisdn]
-  //         })
-  //       });
-  //     })
-  //     .catch(e => {
-  //       console.log(e)
-  //       let responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
-  //       this.setState({
-  //         result: [...this.state.result,responseWithMsisdn]
-  //       })
-  //     })
+  soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
+      .then(response => {
+            let currentResponse = response.data
+            let xml = new XMLParser().parseFromString(currentResponse);
+            let responseValue = xml.getElementsByTagName("description")[0].value
+            let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
+            let responseWithMsisdn = `${cMsisdn} : SubscriberStatusChange : ${responseValue}`
+            this.setState({
+              result: [...this.state.result,responseWithMsisdn]
+            })
+      })
+      .catch(e => {
+        console.log(e)
+        let responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+        this.setState({
+          result: [...this.state.result,responseWithMsisdn]
+        })
+      })
 
-    // });                  
 });
 };
 

@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Form } from 'react-bootstrap';
 import { ProgressBar } from 'react-bootstrap';
 import soapService from "../../services/soapRequest.service"
+
+
 var XMLParser = require('react-xml-parser');
+
 
 export class SubscriberStatusChange extends Component {
   constructor() {
@@ -71,8 +74,38 @@ this.state.msisdn.map(currentMsisdn => {
 
   render () {
     return (
-      <div>
-        <div className="row" id='dashboard'>
+      <div id='dashboard'>
+        <div className="row">
+        <div className="col-12 grid-margin">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">SSCM Subscriber status change - Production</h4>
+                <form className="form-sample">
+                  <div className="row mt-5">
+                    <div className="col-md-3">
+                      <span>
+                        <Form.Group>
+                        <label>Large input</label>
+                        <Form.Control type="text" className="form-control-lg" placeholder="msisdn" aria-label="M" />
+                        </Form.Group>
+                        <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
+                      </span>
+                    </div>
+
+                    <div className="col-md-6 offset-1">
+                    <Form.Group>
+                    <label htmlFor="exampleTextarea1">Result</label>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12" rows="30"  onChange={this.onChangeResult} value={this.state.result.join('\n')} spellCheck="false">
+                    </textarea>
+                    </Form.Group>
+                    </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row" >
         <div className="col-lg-12 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">

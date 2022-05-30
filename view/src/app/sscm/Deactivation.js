@@ -32,6 +32,7 @@ export class Deactivation extends Component {
   this.onChangeCampaignId = this.onChangeCampaignId.bind(this);
   this.onChangeActionType = this.onChangeActionType.bind(this);
   this.onChangeChannel = this.onChangeChannel.bind(this);
+  this.onChangeResult = this.onChangeResult.bind(this);
   this.onChangeTransactionId = this.onChangeTransactionId.bind(this);
   this.OnStart = this.OnStart.bind(this);
 }
@@ -39,6 +40,12 @@ export class Deactivation extends Component {
 onChangeMsisdn(e) {
   this.setState({
     msisdn: e.target.value.split('\n')
+  });
+};
+
+onChangeResult(e) {
+  this.setState({
+    result: e.target.value.split('\n')
   });
 };
 
@@ -72,6 +79,8 @@ onChangeTransactionId(e) {
   });
 };
 
+
+
 OnStart(e){
 e.preventDefault();
 if (this.state.actionType == "Stop Renewal"){
@@ -79,17 +88,18 @@ console.log("stop renewal started");
 this.state.msisdn.map(currentMsisdn => {
   soapService.StopRenewal(currentMsisdn,this.state.offerId,this.state.campaignId,this.state.channel,this.state.currentDate,this.state.transactionId)
   .then(response => {
-    var xml = new XMLParser().parseFromString(response.data);
-    var responseValue = xml.getElementsByTagName("description")[0].value
-    var responseWithMsisdn = `${currentMsisdn} : StopRenewal : ${responseValue}`
+    let currentResponse = response.data
+    let xml = new XMLParser().parseFromString(currentResponse);
+    let responseValue = xml.getElementsByTagName("description")[0].value
+    let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
+    let responseWithMsisdn = `${cMsisdn} : Stop renewal : ${responseValue}`
     this.setState({
       result: [...this.state.result,responseWithMsisdn]
     })
-    console.log(this.state.result);
   })
   .catch(e => {
     console.log(e)
-    var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+    var responseWithMsisdn = `${currentMsisdn} : Stop renewal : failed to stop renewal`
     this.setState({
       result: [...this.state.result,responseWithMsisdn]
     })
@@ -102,17 +112,18 @@ if (this.state.actionType == "Terminate"){
   this.state.msisdn.map(currentMsisdn => {
     soapService.TerminateOffer(currentMsisdn,this.state.offerId,this.state.channel)
     .then(response => {
-      var xml = new XMLParser().parseFromString(response.data);
-      var responseValue = xml.getElementsByTagName("description")[0].value
-      var responseWithMsisdn = `${currentMsisdn} : TerminateOffer : ${responseValue}`
+      let currentResponse = response.data
+      let xml = new XMLParser().parseFromString(currentResponse);
+      let responseValue = xml.getElementsByTagName("description")[0].value
+      let cMsisdn = xml.getElementsByTagName("msisdn")[0].value
+      let responseWithMsisdn = `${cMsisdn} : Termination : ${responseValue}`
       this.setState({
         result: [...this.state.result,responseWithMsisdn]
       })
-      console.log(this.state.result);
     })
     .catch(e => {
       console.log(e)
-      var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
+      var responseWithMsisdn = `${currentMsisdn} : Termination : failed to terminate the offer`
       this.setState({
         result: [...this.state.result,responseWithMsisdn]
       })
@@ -183,7 +194,7 @@ if (this.state.actionType == "Terminate"){
                     <div className="col-md-9 ">
                     <Form.Group>
                     <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="42" defaultValue={this.state.result.join('\n')} spellCheck="false"></textarea>
+                    <textarea className="form-control textarea-control" id="exampleTextarea12"  rows="42" onChange={this.onChangeResult} value={this.state.result.join('\n')} spellCheck="false"></textarea>
                     </Form.Group>
                     </div>
                     </div>
