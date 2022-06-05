@@ -1,8 +1,8 @@
 module.exports = app => {
-    const charging = require("../controllers/charging.controller.js");
+    const air = require("../controllers/air.controller.js");
     var router = require("express").Router();
     // Create a new User
-    router.post("/retrieveSubscriberInfo", charging.retrieveSubscriberInfo);
+    router.post("/retrieveSubscriberInfo", air.retrieveSubscriberInfo);
     
-    app.use('/api/charging', router);
+    app.use('/api/air', router);
   };

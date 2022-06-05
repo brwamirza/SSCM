@@ -1,6 +1,5 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
-
 const fs = require('fs')
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({mergeAttrs:true});
@@ -36,7 +35,6 @@ exports.retrieveSubscriberInfo = (req, res) => {
         '</ws:subscriberStatusChange>'+
         '</soapenv:Body>'+
         '</soapenv:Envelope>';
-
 
 
     // Send the POST request

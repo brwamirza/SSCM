@@ -41,7 +41,7 @@ RetrieveSubscriptions(msisdn,offerId,channel){
 
 // SSCM Termination soap request
 RetrieveSubscriberInfo(msisdn){
-    return http.get("/sscm/retrieveSubscriberInfo",{
+    return http.get("/air/retrieveSubscriberInfo",{
         msisdn
     });
 } 
