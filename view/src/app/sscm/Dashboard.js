@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Form } from 'react-bootstrap';
 import { ProgressBar } from 'react-bootstrap';
 import soapService from "../../services/soapRequest.service"
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import TabContainer from 'react-bootstrap/TabContainer'
+import TabContent from 'react-bootstrap/TabContent'
 
 
 var XMLParser = require('react-xml-parser');
@@ -53,21 +57,13 @@ onChangeStatus(e) {
 OnStart(e){
 e.preventDefault();
 this.state.msisdn.map(currentMsisdn => {
-  soapService.SubscriberStatusChange(currentMsisdn,this.state.statusTo)
+  soapService.retrieveSubscriberInfo(currentMsisdn)
       .then(response => {
-        var xml = new XMLParser().parseFromString(response.data);
-        var responseValue = xml.getElementsByTagName("description")[0].value
-        var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : ${responseValue}`
-        this.setState({
-          result: [...this.state.result,responseWithMsisdn]
-        })
+        console.log(response)
       })
       .catch(e => {
         console.log(e)
-        var responseWithMsisdn = `${currentMsisdn} : SubscriberStatusChange : failed to change status`
-        this.setState({
-          result: [...this.state.result,responseWithMsisdn]
-        })
+        var responseWithMsisdn = `${currentMsisdn} : failed to retrieve subscriber info`
       });
 });
 };
@@ -79,33 +75,186 @@ this.state.msisdn.map(currentMsisdn => {
         <div className="col-12 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">SSCM Subscriber status change - Production</h4>
+                <h4 className="card-title">SSCM offers</h4>
                 <form className="form-sample">
                   <div className="row mt-5">
-                    <div className="col-md-3">
-                      <span>
+                    <div className="col-md-4 d-inline">
                         <Form.Group>
-                        <label>Large input</label>
-                        <Form.Control type="text" className="form-control-lg" placeholder="msisdn" aria-label="M" />
+                        <Form.Control type="text" className="form-control" placeholder="msisdn" aria-label="Msisdn" />
                         </Form.Group>
-                        <button type="submit" className="btn btn-primary mr-2" onClick={this.OnStart}>Start</button>
-                      </span>
                     </div>
-
-                    <div className="col-md-6 offset-1">
-                    <Form.Group>
-                    <label htmlFor="exampleTextarea1">Result</label>
-                    <textarea className="form-control textarea-control" id="exampleTextarea12" rows="30"  onChange={this.onChangeResult} value={this.state.result.join('\n')} spellCheck="false">
-                    </textarea>
-                    </Form.Group>
+                    <div className="col-md-2">
+                    <button type="submit" className="btn btn-primary btn-md btn-block mr-2" onClick={this.OnStart}>Search</button>
                     </div>
                     </div>
                 </form>
+                {/* Tabs */}
+                <div>
+                  <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
+                    <Tab eventKey="profile" title="Profile">
+                      <div>
+                      <div className='row'>
+                          <div className="col-md-12 grid-margin stretch-card">
+                            <div className="card">
+                              <div className="card-body d-flex">
+                                <h4 className="card-title">STATUS</h4>
+                                <h4 className="flex-center">ACTIVE</h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* row 2 */}
+                        <div className='row'>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">S_C_Current:&nbsp;</h6>
+                              <p className="card-description"> 663 - CS_Postpaid</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Supervision Expiry Date:&nbsp; </h6>
+                              <p className="card-description">20371231120000</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Service Fee Expiry Date:&nbsp;</h6>
+                              <p className="card-description">20371231120000</p>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      {/* row 2 */}
+                        <div className='row'>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Activation Date:&nbsp;</h6>
+                              <p className="card-description">20190520120000</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Language:&nbsp;</h6>
+                              <p className="card-description">English</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Main Balance:&nbsp;</h6>
+                              <p className="card-description">4500</p>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      {/* row 3 */}
+                        <div className='row'>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Location Number:&nbsp;</h6>
+                              <p className="card-description">964750005</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Employee Balance:&nbsp;</h6>
+                              <p className="card-description">0</p>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="col-md-4 grid-margin stretch-card">
+                          <div className="card">
+                            <div className="card-body d-flex">
+                              <h6 className="card-title">Expire:&nbsp;</h6>
+                              <p className="card-description">18 days</p>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </Tab>
+                    <Tab eventKey="offers" title="Offers">
+                     <div className="row" >
+                        <div className="col-lg-12 grid-margin stretch-card">
+                            <div className="card">
+                              <div className="card-body">
+                                {/* <h4 className="card-title">Striped Table</h4> */}
+                                <div className="table-responsive">
+                                  <table className="table table-striped table-hover table-bordered" >
+                                    <thead>
+                                      <tr>
+                                        <th> Name </th>
+                                        <th> sDate </th>
+                                        <th> rDate </th>
+                                        <th> eDate </th>
+                                        <th> OfferId </th>
+                                        <th> rData </th>
+                                        <th> rMin </th>
+                                        <th> rSMS </th>
+                                        <th> Renewable </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td className="py-1">
+                                          <img src={require("../../assets/images/faces/face1.jpg")} alt="user icon" />
+                                        </td>
+                                        <td> Herman Beck </td>
+                                        <td> May 15, 2015 </td>
+                                        <td> $ 77.99 </td>
+                                        <td> May 15, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                      </tr>
+                                      <tr>
+                                        <td className="py-1">
+                                          <img src={require("../../assets/images/faces/face2.jpg")} alt="user icon" />
+                                        </td>
+                                        <td> Messsy Adam </td>
+                                        <td> May 15, 2015 </td>
+                                        <td> $245.30 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                        <td> July 1, 2015 </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </Tab>
+                    <Tab eventKey="contact" title="Contact">
+                      {/* <Sonnet /> */}
+                      <p>Tab3</p>
+                    </Tab>
+                  </Tabs>
+                </div>
+                {/* END of Tabs */}
               </div>
             </div>
           </div>
         </div>
-        <div className="row" >
+        {/* <div className="row" >
         <div className="col-lg-12 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
@@ -158,7 +307,7 @@ this.state.msisdn.map(currentMsisdn => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div> 
     );
   }

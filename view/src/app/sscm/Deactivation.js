@@ -22,7 +22,7 @@ export class Deactivation extends Component {
     actionType:"Stop Renewal",
     channel:"APPSUPPORT",
     currentDate:"",
-    transactionId:"APPSUPPORT",
+    transactionId:"",
     currentDate: date,
     result:[]
   };

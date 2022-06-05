@@ -6,6 +6,6 @@ module.exports = app => {
     router.post("/terminateOffer", sscm.terminateOffer);
     router.post("/stopRenewal", sscm.stopRenewal);
     router.post("/retrieveSubscriptions", sscm.retrieveSubscriptions);
-
+    
     app.use('/api/sscm', router);
   };
