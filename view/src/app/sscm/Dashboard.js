@@ -18,12 +18,13 @@ export class SubscriberStatusChange extends Component {
   this.state = {
     msisdn: [],
     statusTo: "1",
-    result:[]
+    result:[],
+    availableOffers:[]
   };
 
   this.onChangeStatus = this.onChangeStatus.bind(this);
   this.onChangeMsisdn = this.onChangeMsisdn.bind(this);
-  this.OnStart = this.OnStart.bind(this);
+  this.OnSearchMsisdnInfo = this.OnSearchMsisdnInfo.bind(this);
 }
 
 
@@ -54,18 +55,31 @@ onChangeStatus(e) {
 };
 
 
-OnStart(e){
+OnSearchMsisdnInfo(e){
 e.preventDefault();
-this.state.msisdn.map(currentMsisdn => {
-  soapService.retrieveSubscriberInfo(currentMsisdn)
+  soapService.RetrieveSubscriptions(this.state.msisdn)
       .then(response => {
-        console.log(response)
+        this.setState({
+          availableOffers: []
+        })
+        let currentOffers = []
+        let xml = new XMLParser().parseFromString(response.data);
+        currentOffers = xml.getElementsByTagName("externalOfferId")[0].value
+
+        let airOfferDetails = xml.getElementsByTagName("attribute")[4]
+        let details = airOfferDetails.getElementsByTagName("value")[0].value
+        // coverting details result froms tring to JSOn to access the data
+        details = details
+
+        this.setState({
+          availableOffers: [...this.state.availableOffers,currentOffers]
+        })
+        console.log(details);
       })
       .catch(e => {
         console.log(e)
-        var responseWithMsisdn = `${currentMsisdn} : failed to retrieve subscriber info`
+        var responseWithMsisdn = `${this.state.msisdn} : failed to retrieve subscriptions`
       });
-});
 };
 
   render () {
@@ -80,11 +94,11 @@ this.state.msisdn.map(currentMsisdn => {
                   <div className="row mt-5">
                     <div className="col-md-4 d-inline">
                         <Form.Group>
-                        <Form.Control type="text" className="form-control" placeholder="msisdn" aria-label="Msisdn" />
+                        <Form.Control type="text" className="form-control" placeholder="msisdn" aria-label="Msisdn" onChange={this.onChangeMsisdn} />
                         </Form.Group>
                     </div>
                     <div className="col-md-2">
-                    <button type="submit" className="btn btn-primary btn-md btn-block mr-2" onClick={this.OnStart}>Search</button>
+                    <button type="submit" className="btn btn-primary btn-md btn-block mr-2" onClick={this.OnSearchMsisdnInfo}>Search</button>
                     </div>
                     </div>
                 </form>

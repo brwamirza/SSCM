@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // simple route
 // const db = require("./models");
 require("./routes/sscm.routes")(app);
+require("./routes/air.routes")(app);
 // db.sequelize.sync();
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to brwa application." });

@@ -203,7 +203,7 @@ exports.retrieveSubscriptions = (req, res) => {
     '</soapenv:Envelope>';
 
     // Send the POST request
-    xmlhttp.setRequestHeader('soapAction','com.ericsson.esdp.flowmanager/subscriberStatusChange');
+    xmlhttp.setRequestHeader('soapAction','com.ericsson.esdp.flowmanager/retrieveSubscriptions');
     xmlhttp.setRequestHeader('Content-Type','application/xml'); 
     let response = xmlhttp.send(sr)
 };

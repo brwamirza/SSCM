@@ -31,17 +31,15 @@ TerminateOffer(msisdn,offerId,channel){
 } 
 
 // SSCM Termination soap request
-RetrieveSubscriptions(msisdn,offerId,channel){
-    return http.get("/sscm/retrieveSubscriptions",{
-        msisdn,
-        offerId,
-        channel
+RetrieveSubscriptions(msisdn){
+    return http.post("/sscm/retrieveSubscriptions",{
+        msisdn
     });
 } 
 
-// SSCM Termination soap request
+// AIR susbcriber info
 RetrieveSubscriberInfo(msisdn){
-    return http.get("/air/retrieveSubscriberInfo",{
+    return http.post("/air/retrieveSubscriberInfo",{
         msisdn
     });
 } 

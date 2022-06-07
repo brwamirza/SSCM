@@ -1,49 +1,38 @@
+var util = require('util')
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const fs = require('fs')
 const xml2js = require('xml2js');
+const axios = require("axios");
 const parser = new xml2js.Parser({mergeAttrs:true});
 let result = [];
 
+const middleware = axios.create({
+    baseURL: "http://10.10.17.117/middleware",
+    headers: {
+      "Content-type": "application/json",
+      "KOREK-APIKEY": "50733C1F060AAF4261A667A6E2ACF2144BDD34DE"
+    }
+  });
 
-// Find all published Users
+// get all subscriber info from air (middleware)
 exports.retrieveSubscriberInfo = (req, res) => {
-    const XMLHttpRequest = require('xhr2');
-    const xmlhttp = new XMLHttpRequest();
-    let xmlResponse = "";
-
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    xmlResponse = xmlhttp.response
-                    result = '<body>'+'<msisdn>'+req.body.msisdn+'</msisdn>'+xmlResponse+'</body>'
-                    console.log(result)
-                    res.send(result);
-                    result = [];
-                }
-            }
-        }
-    xmlhttp.open('POST', 'http://10.26.57.7:9080/esdp-wsPort', true);
-       var sr=
-        '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.esdp.ericsson.com">'+
-        '<soapenv:Header/>'+
-        '<soapenv:Body>'+
-        '<ws:subscriberStatusChange>'+
-        '<ws:msisdn>'+req.body.msisdn+'</ws:msisdn>'+
-        '<ws:newStatus>'+req.body.statusTo+'</ws:newStatus>'+
-        '<ws:transactionId>'+req.body.msisdn+'</ws:transactionId>'+
-        '</ws:subscriberStatusChange>'+
-        '</soapenv:Body>'+
-        '</soapenv:Envelope>';
-
-
-    // Send the POST request
-    // xmlhttp.setRequestHeader('PublicKeyToken','b77a5c561934e089');
-    xmlhttp.setRequestHeader('soapAction','com.ericsson.esdp.flowmanager/subscriberStatusChange');
-    xmlhttp.setRequestHeader('Content-Type','application/xml'); 
-    let response = xmlhttp.send(sr)
-    // xmlResponse = await xmlhttp.response
-    // result = [...result,'<body>'+'<msisdn>'+req.body.msisdn+'</msisdn>'+xmlResponse+'</body>']
-
-
+    let myData = {
+        "Channel" : "selfcare",
+        "Msisdn" : req.body.msisdn,
+        "ServiceId" : "1000",
+        "TransactionId" : "3d3963da-6ea2-426f-82ed-905613c2f89d"
+    }
+    const json = JSON.stringify(myData);
+    middleware.post("/service/enquiry", {
+        json
+    })
+    .then( data => {
+        // console.log(data)
+        console.log(util.inspect(data))
+        // res.send(data);
+    })
+    .catch(err => {
+        res.send({ message: err.message });
+    })
 };
