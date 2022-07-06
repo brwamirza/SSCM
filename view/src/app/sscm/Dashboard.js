@@ -33,7 +33,7 @@ onChangeMsisdn(e) {
     msisdn: e.target.value.split('\n')
   });
     // console.log(e.target.value);
-    console.log(e.target.value.split('\n'));
+    // console.log(e.target.value.split('\n'));
 };
 
 onChangeStatus(e) {
@@ -62,19 +62,226 @@ e.preventDefault();
         this.setState({
           availableOffers: []
         })
-        let currentOffers = []
+        let offerName = ""
+        let offerList = []
+        let subscriptions = []
+        
         let xml = new XMLParser().parseFromString(response.data);
-        currentOffers = xml.getElementsByTagName("externalOfferId")[0].value
+        offerName = xml.getElementsByTagName("externalOfferId")[0].value
+        // rDate = xml.getElementsByTagName("nextRenewalDate")[0].value
 
-        let airOfferDetails = xml.getElementsByTagName("attribute")[4]
-        let details = airOfferDetails.getElementsByTagName("value")[0].value
-        // coverting details result froms tring to JSOn to access the data
-        details = details
+        // let checkRenewable = xml.getElementsByTagName("retrieveSubscriptionsReturn")[0]
+        // let offerStatus = checkRenewable.getElementsByTagName("subscriptionStatus")[0].value
+        
+        // loop through subscriptions
+        subscriptions = xml.getElementsByTagName("subscription")
+        subscriptions.map(currentSub => {
+          let campaignName = ""
+          let rData = "0"
+          let nextRenewalDate = ""
+          let rMin = "0"
+          let rSMS = "0"
+          let rMoney = "0"
+          let startDate = ""
+          let sameGroupOfferList = ""
 
-        this.setState({
-          availableOffers: [...this.state.availableOffers,currentOffers]
+          console.log(currentSub)
+          let offerStatus = currentSub.getElementsByTagName("subscriptionStatus")[0].value
+          // checking subscription status
+            if(offerStatus == "1"){
+            console.log("active")
+            campaignName = currentSub.getElementsByTagName("campaignName")[0].value
+            startDate = currentSub.getElementsByTagName("startDate")[0].value
+            nextRenewalDate = currentSub.getElementsByTagName("nextRenewalDate")[0].value 
+            let AIRDetails = currentSub.getElementsByTagName("service")[0]  
+            let serviceExpiryDate = AIRDetails.getElementsByTagName("serviceExpiryDate")[0].value
+            let offerAttrubutes = AIRDetails.getElementsByTagName("attribute")
+            offerAttrubutes.map(currentAttr => {
+              if (currentAttr.getElementsByTagName("name")[0].value === "OFFER_LIST"){
+                sameGroupOfferList = currentAttr.getElementsByTagName("value")[0].value
+                console.log(sameGroupOfferList)
+                let sameGroupOffersJson = JSON.parse(sameGroupOfferList).offerlist
+                let sameGroupOffersJsonUL = JSON.parse(sameGroupOfferList)
+                
+
+                if(sameGroupOffersJson){
+                  sameGroupOffersJson.map(currentGroup => {
+                    console.log(currentGroup)
+  
+                    if(currentGroup.activeData){
+                      rData = (parseInt(((currentGroup.activeData/1024)/1024))+" MB")
+                    }
+                    if(currentGroup.activeMinutes){
+                      rMin = (parseInt(((currentGroup.activeMinutes/60)))+" Min")
+                    }
+                    if(currentGroup.Sms){
+                      rSMS = (parseInt(((currentGroup.activeSms))))
+                    }
+                    if(currentGroup.activeMoney){
+                      rMoney = (parseInt(((currentGroup.activeMoney))))
+                    }
+                    let offer = [
+                      campaignName,
+                      startDate,
+                      nextRenewalDate,
+                      serviceExpiryDate,
+                      currentGroup.offerid,
+                      rData,
+                      rMin,
+                      rSMS,
+                      rMoney
+                    ]
+  
+                    this.setState({
+                      availableOffers: [...this.state.availableOffers,offer]
+                    })
+                  })
+                }
+                else {
+                  sameGroupOffersJsonUL.map(currentGroup => {
+                    let offerIdAir = "0"
+                    console.log(currentGroup)
+  
+                    if(currentGroup.activeData){
+                      rData = (parseInt(((currentGroup.activeData/1024)/1024))+" MB")
+                    }
+                    if(currentGroup.activeMinutes){
+                      rMin = (parseInt(((currentGroup.activeMinutes/60)))+" Min")
+                    }
+                    if(currentGroup.Sms){
+                      rSMS = (parseInt(((currentGroup.activeSms))))
+                    }
+                    if(currentGroup.activeMoney){
+                      rMoney = (parseInt(((currentGroup.activeMoney))))
+                    }
+                    if(currentGroup.name === "OFFER_ID"){
+                      offerIdAir = currentGroup.value
+                    }
+                    let offer = [
+                      campaignName,
+                      startDate,
+                      nextRenewalDate,
+                      serviceExpiryDate,
+                      offerIdAir,
+                      rData,
+                      rMin,
+                      rSMS,
+                      rMoney
+                    ]
+  
+                    this.setState({
+                      availableOffers: [...this.state.availableOffers,offer]
+                    })
+                  })
+                }
+
+              }
+            })
+            console.log("-----------------------------")
+          }
+          if(offerStatus == "2"){
+            rData = ""
+            rMin = ""
+            rSMS = ""
+            rMoney = ""
+            let offerIdAir = ""
+            campaignName = currentSub.getElementsByTagName("campaignName")[0].value
+            startDate = currentSub.getElementsByTagName("startDate")[0].value
+            nextRenewalDate = currentSub.getElementsByTagName("nextRenewalDate")[0].value 
+            let AIRDetails = currentSub.getElementsByTagName("service")[0]  
+            let serviceExpiryDate = AIRDetails.getElementsByTagName("serviceExpiryDate")[0].value
+
+            let offer = [
+              campaignName,
+              startDate,
+              nextRenewalDate,
+              serviceExpiryDate,
+              offerIdAir,
+              rData,
+              rMin,
+              rSMS,
+              rMoney
+            ]
+            this.setState({
+              availableOffers: [...this.state.availableOffers,offer]
+            })
+            console.log("-----------------------------")
+
+          }
+          else{
+            rData = ""
+            rMin = ""
+            rSMS = ""
+            rMoney = ""
+
+            console.log("-----------------------------")
+
+          }
         })
-        console.log(details);
+
+        // if(offerStatus == "1"){
+        //   let renewalArraySize = checkRenewable.getElementsByTagName("attributes").length
+        //   checkRenewable = checkRenewable.getElementsByTagName("attributes")[renewalArraySize-1]
+        //   checkRenewable = checkRenewable.getElementsByTagName("value")[0].value
+        //   if(checkRenewable === "NA"){
+        //     checkRenewable = "False"
+        //   }
+        //   else{
+        //     checkRenewable = "True"
+        //   }
+        // }
+        // else{
+        //   rData = ""
+        //   rMin = ""
+        //   rSMS = ""
+        //   rMoney = ""
+        // }
+
+        // renewable = renewable.getElementsByTagName("value")[0].value
+        // let airOfferDetails = xml.getElementsByTagName("service")
+        // console.log(airOfferDetails)
+        // xml.getElementsByTagName("attribute").map(currentValue => {
+        //   if(xml.getElementsByTagName("attribute").value === "")
+        // })
+        // let details = airOfferDetails.getElementsByTagName("value")[0].value
+
+        // coverting details result froms tring to JSON to access the data
+        // details = JSON.parse(details)
+        // console.log(details)
+        // details = details.offerlist[0] //list of same group, use map to loop through)
+
+        // if(details.activeData){
+        //   rData = (parseInt(((details.activeData/1024)/1024))+" MB")
+        // }
+        // if(details.activeMinutes){
+        //   rMin = (parseInt(((details.activeMinutes/60)))+" Min")
+        // }
+        // if(details.Sms){
+        //   rSMS = (parseInt(((details.activeSms))))
+        // }
+        // if(details.activeMoney){
+        //   rMoney = (parseInt(((details.activeMoney))))
+        // }
+
+        // let rData = details.activeData
+        // offerList = [
+        //   offerName,
+        //   details.startdate,
+        //   rDate,
+        //   details.expirydate,
+        //   details.offerid,
+        //   rData,
+        //   rMin,
+        //   rSMS,
+        //   rMoney,
+        //   checkRenewable
+        // ]
+
+        // this.setState({
+        //   availableOffers: [...this.state.availableOffers,offerList]
+        // })
+        console.log(this.state.availableOffers)
+
       })
       .catch(e => {
         console.log(e)
