@@ -10,10 +10,24 @@ import TabContent from 'react-bootstrap/TabContent'
 
 var XMLParser = require('react-xml-parser');
 
+const Offer = props => (
+  <tr>
+    <td className='w-100'>{props.offer[0]}</td>
+    <td className='w-100'>{props.offer[1]}</td>
+    <td className='w-100'>{props.offer[2]}</td>
+    <td className='w-100'>{props.offer[3]}</td>
+    <td className='w-100'>{props.offer[4]}</td>
+    <td className='w-100'>{props.offer[5]}</td>
+    <td className='w-100'>{props.offer[6]}</td>
+    <td className='w-100'>{props.offer[7]}</td>
+    <td className='w-100'>{props.offer[8]}</td>
+    <td className='w-100'>{props.offer[9]}</td>
+  </tr>
+)
 
 export class SubscriberStatusChange extends Component {
-  constructor() {
-  super();
+  constructor(props) {
+  super(props);
 
   this.state = {
     msisdn: [],
@@ -65,7 +79,7 @@ e.preventDefault();
         let offerName = ""
         let offerList = []
         let subscriptions = []
-        
+        let RenewalFlagList = []
         let xml = new XMLParser().parseFromString(response.data);
         offerName = xml.getElementsByTagName("externalOfferId")[0].value
         // rDate = xml.getElementsByTagName("nextRenewalDate")[0].value
@@ -75,6 +89,20 @@ e.preventDefault();
         
         // loop through subscriptions
         subscriptions = xml.getElementsByTagName("subscription")
+        let allAttributes = xml.getElementsByTagName("attribute")
+        allAttributes.map(currentAttr => {
+              // check renewal flag
+              let renewalText = currentAttr.getElementsByTagName("name")[0].value
+              if (renewalText.includes("RENEWABLE")){
+                let RenewalAttr =  currentAttr.getElementsByTagName("value")[0].value
+                if(RenewalAttr != "NA"){
+                  let RenewalFlagAttr = JSON.parse(RenewalAttr).expirydate
+                  RenewalFlagList = [...RenewalFlagList,RenewalFlagAttr ]
+                }
+              }
+        })
+
+
         subscriptions.map(currentSub => {
           let campaignName = ""
           let rData = "0"
@@ -84,6 +112,7 @@ e.preventDefault();
           let rMoney = "0"
           let startDate = ""
           let sameGroupOfferList = ""
+          let renewalFlag = ""
 
           console.log(currentSub)
           let offerStatus = currentSub.getElementsByTagName("subscriptionStatus")[0].value
@@ -97,17 +126,25 @@ e.preventDefault();
             let serviceExpiryDate = AIRDetails.getElementsByTagName("serviceExpiryDate")[0].value
             let offerAttrubutes = AIRDetails.getElementsByTagName("attribute")
             offerAttrubutes.map(currentAttr => {
+
               if (currentAttr.getElementsByTagName("name")[0].value === "OFFER_LIST"){
+                // get air details
                 sameGroupOfferList = currentAttr.getElementsByTagName("value")[0].value
                 console.log(sameGroupOfferList)
                 let sameGroupOffersJson = JSON.parse(sameGroupOfferList).offerlist
                 let sameGroupOffersJsonUL = JSON.parse(sameGroupOfferList)
                 
-
                 if(sameGroupOffersJson){
                   sameGroupOffersJson.map(currentGroup => {
                     console.log(currentGroup)
-  
+                    if(RenewalFlagList.includes(currentGroup.expirydate)){
+                      console.log("worked")
+                      renewalFlag = "True"
+                    }
+                    else{
+                      renewalFlag = "False"
+                    }
+                    
                     if(currentGroup.activeData){
                       rData = (parseInt(((currentGroup.activeData/1024)/1024))+" MB")
                     }
@@ -122,14 +159,15 @@ e.preventDefault();
                     }
                     let offer = [
                       campaignName,
-                      startDate,
+                      currentGroup.startdate,
                       nextRenewalDate,
-                      serviceExpiryDate,
+                      currentGroup.expirydate,
                       currentGroup.offerid,
                       rData,
                       rMin,
                       rSMS,
-                      rMoney
+                      rMoney,
+                      renewalFlag
                     ]
   
                     this.setState({
@@ -166,7 +204,8 @@ e.preventDefault();
                       rData,
                       rMin,
                       rSMS,
-                      rMoney
+                      rMoney,
+                      renewalFlag
                     ]
   
                     this.setState({
@@ -200,7 +239,8 @@ e.preventDefault();
               rData,
               rMin,
               rSMS,
-              rMoney
+              rMoney,
+              renewalFlag
             ]
             this.setState({
               availableOffers: [...this.state.availableOffers,offer]
@@ -288,6 +328,12 @@ e.preventDefault();
         var responseWithMsisdn = `${this.state.msisdn} : failed to retrieve subscriptions`
       });
 };
+
+offerList() {
+  return this.state.availableOffers.map(currentOffer => {
+    return <Offer offer={currentOffer} key={currentOffer[1]}/>;
+  })
+}
 
   render () {
     return (
@@ -426,36 +472,12 @@ e.preventDefault();
                                         <th> rData </th>
                                         <th> rMin </th>
                                         <th> rSMS </th>
+                                        <th> rMoney </th>
                                         <th> Renewable </th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr>
-                                        <td className="py-1">
-                                          <img src={require("../../assets/images/faces/face1.jpg")} alt="user icon" />
-                                        </td>
-                                        <td> Herman Beck </td>
-                                        <td> May 15, 2015 </td>
-                                        <td> $ 77.99 </td>
-                                        <td> May 15, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                      </tr>
-                                      <tr>
-                                        <td className="py-1">
-                                          <img src={require("../../assets/images/faces/face2.jpg")} alt="user icon" />
-                                        </td>
-                                        <td> Messsy Adam </td>
-                                        <td> May 15, 2015 </td>
-                                        <td> $245.30 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                        <td> July 1, 2015 </td>
-                                      </tr>
+                                      {this.offerList()}
                                     </tbody>
                                   </table>
                                 </div>
