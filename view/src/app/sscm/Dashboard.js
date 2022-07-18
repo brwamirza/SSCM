@@ -12,16 +12,16 @@ var XMLParser = require('react-xml-parser');
 
 const Offer = props => (
   <tr>
-    <td className='w-100'>{props.offer[0]}</td>
-    <td className='w-100'>{props.offer[1]}</td>
-    <td className='w-100'>{props.offer[2]}</td>
-    <td className='w-100'>{props.offer[3]}</td>
-    <td className='w-100'>{props.offer[4]}</td>
-    <td className='w-100'>{props.offer[5]}</td>
-    <td className='w-100'>{props.offer[6]}</td>
-    <td className='w-100'>{props.offer[7]}</td>
-    <td className='w-100'>{props.offer[8]}</td>
-    <td className='w-100'>{props.offer[9]}</td>
+    <td>{props.offer[0]}</td>
+    <td>{props.offer[1]}</td>
+    <td>{props.offer[2]}</td>
+    <td>{props.offer[3]}</td>
+    <td>{props.offer[4]}</td>
+    <td>{props.offer[5]}</td>
+    <td>{props.offer[6]}</td>
+    <td>{props.offer[7]}</td>
+    <td>{props.offer[8]}</td>
+    <td>{props.offer[9]}</td>
   </tr>
 )
 
@@ -113,6 +113,8 @@ e.preventDefault();
           let startDate = ""
           let sameGroupOfferList = ""
           let renewalFlag = ""
+          let offerIdAir = "0"
+          let AttrValues = ""
 
           console.log(currentSub)
           let offerStatus = currentSub.getElementsByTagName("subscriptionStatus")[0].value
@@ -124,11 +126,11 @@ e.preventDefault();
             nextRenewalDate = currentSub.getElementsByTagName("nextRenewalDate")[0].value 
             let AIRDetails = currentSub.getElementsByTagName("service")[0]  
             let serviceExpiryDate = AIRDetails.getElementsByTagName("serviceExpiryDate")[0].value
-            let offerAttrubutes = AIRDetails.getElementsByTagName("attribute")
-            offerAttrubutes.map(currentAttr => {
-
+            let offerAttributes = AIRDetails.getElementsByTagName("attribute")
+            offerAttributes.map(currentAttr => {
               if (currentAttr.getElementsByTagName("name")[0].value === "OFFER_LIST"){
                 // get air details
+                AttrValues = currentAttr.getElementsByTagName("name")[0].value
                 sameGroupOfferList = currentAttr.getElementsByTagName("value")[0].value
                 console.log(sameGroupOfferList)
                 let sameGroupOffersJson = JSON.parse(sameGroupOfferList).offerlist
@@ -148,10 +150,14 @@ e.preventDefault();
                     if(currentGroup.activeData){
                       rData = (parseInt(((currentGroup.activeData/1024)/1024))+" MB")
                     }
+                    // for internet packages
+                    if(currentGroup.activeAmount){
+                      rData = (parseInt(((currentGroup.activeAmount/1024)/1024))+" MB")
+                    }
                     if(currentGroup.activeMinutes){
                       rMin = (parseInt(((currentGroup.activeMinutes/60)))+" Min")
                     }
-                    if(currentGroup.Sms){
+                    if(currentGroup.activeSms){
                       rSMS = (parseInt(((currentGroup.activeSms))))
                     }
                     if(currentGroup.activeMoney){
@@ -177,16 +183,18 @@ e.preventDefault();
                 }
                 else {
                   sameGroupOffersJsonUL.map(currentGroup => {
-                    let offerIdAir = "0"
                     console.log(currentGroup)
   
                     if(currentGroup.activeData){
                       rData = (parseInt(((currentGroup.activeData/1024)/1024))+" MB")
                     }
+                    if(currentGroup.activeAmount){
+                      rData = (parseInt(((currentGroup.activeAmount/1024)/1024))+" MB")
+                    }
                     if(currentGroup.activeMinutes){
                       rMin = (parseInt(((currentGroup.activeMinutes/60)))+" Min")
                     }
-                    if(currentGroup.Sms){
+                    if(currentGroup.activeSms){
                       rSMS = (parseInt(((currentGroup.activeSms))))
                     }
                     if(currentGroup.activeMoney){
@@ -215,7 +223,30 @@ e.preventDefault();
                 }
 
               }
+
             })
+            if(!AttrValues.includes("OFFER_LIST")){
+              console.log("no OFFER_LIST")
+              console.log(AttrValues)
+              let offer = [
+                campaignName,
+                startDate,
+                nextRenewalDate,
+                serviceExpiryDate,
+                offerIdAir,
+                rData,
+                rMin,
+                rSMS,
+                rMoney,
+                renewalFlag
+              ]
+
+              this.setState({
+                availableOffers: [...this.state.availableOffers,offer]
+              })
+            }
+
+
             console.log("-----------------------------")
           }
           if(offerStatus == "2"){
@@ -259,67 +290,6 @@ e.preventDefault();
           }
         })
 
-        // if(offerStatus == "1"){
-        //   let renewalArraySize = checkRenewable.getElementsByTagName("attributes").length
-        //   checkRenewable = checkRenewable.getElementsByTagName("attributes")[renewalArraySize-1]
-        //   checkRenewable = checkRenewable.getElementsByTagName("value")[0].value
-        //   if(checkRenewable === "NA"){
-        //     checkRenewable = "False"
-        //   }
-        //   else{
-        //     checkRenewable = "True"
-        //   }
-        // }
-        // else{
-        //   rData = ""
-        //   rMin = ""
-        //   rSMS = ""
-        //   rMoney = ""
-        // }
-
-        // renewable = renewable.getElementsByTagName("value")[0].value
-        // let airOfferDetails = xml.getElementsByTagName("service")
-        // console.log(airOfferDetails)
-        // xml.getElementsByTagName("attribute").map(currentValue => {
-        //   if(xml.getElementsByTagName("attribute").value === "")
-        // })
-        // let details = airOfferDetails.getElementsByTagName("value")[0].value
-
-        // coverting details result froms tring to JSON to access the data
-        // details = JSON.parse(details)
-        // console.log(details)
-        // details = details.offerlist[0] //list of same group, use map to loop through)
-
-        // if(details.activeData){
-        //   rData = (parseInt(((details.activeData/1024)/1024))+" MB")
-        // }
-        // if(details.activeMinutes){
-        //   rMin = (parseInt(((details.activeMinutes/60)))+" Min")
-        // }
-        // if(details.Sms){
-        //   rSMS = (parseInt(((details.activeSms))))
-        // }
-        // if(details.activeMoney){
-        //   rMoney = (parseInt(((details.activeMoney))))
-        // }
-
-        // let rData = details.activeData
-        // offerList = [
-        //   offerName,
-        //   details.startdate,
-        //   rDate,
-        //   details.expirydate,
-        //   details.offerid,
-        //   rData,
-        //   rMin,
-        //   rSMS,
-        //   rMoney,
-        //   checkRenewable
-        // ]
-
-        // this.setState({
-        //   availableOffers: [...this.state.availableOffers,offerList]
-        // })
         console.log(this.state.availableOffers)
 
       })
@@ -458,7 +428,7 @@ offerList() {
                      <div className="row" >
                         <div className="col-lg-12 grid-margin stretch-card">
                             <div className="card">
-                              <div className="card-body">
+                              {/* <div className="card-body"> */}
                                 {/* <h4 className="card-title">Striped Table</h4> */}
                                 <div className="table-responsive">
                                   <table className="table table-striped table-hover table-bordered" >
@@ -481,14 +451,14 @@ offerList() {
                                     </tbody>
                                   </table>
                                 </div>
-                              </div>
+                              {/* </div> */}
                             </div>
                           </div>
                         </div>
                     </Tab>
-                    <Tab eventKey="contact" title="Contact">
+                    <Tab eventKey="Deductions" title="Deductions">
                       {/* <Sonnet /> */}
-                      <p>Tab3</p>
+                      <p>No Data</p>
                     </Tab>
                   </Tabs>
                 </div>
